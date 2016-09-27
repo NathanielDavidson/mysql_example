@@ -1,0 +1,6 @@
+# Maven build artifacts
+/target/**
+
+# IDEA stuff
+/.idea/**
+*.iml
