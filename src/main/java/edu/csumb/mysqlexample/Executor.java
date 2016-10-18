@@ -1,5 +1,6 @@
 package edu.csumb.mysqlexample;
 
+import java.io.PrintStream;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
@@ -8,8 +9,17 @@ import java.sql.Statement;
  */
 public class Executor {
 
-    public static void main(String[] args){
-        DBConnector.initialize();
+    private static final String TABLE_NAME = "info";
+
+    public static void execute(PrintStream out){
+        try {
+
+            DBController rdsDB = new DBController(); // connect to the mysql server
+
+            IdDataTable table = new IdDataTable(TABLE_NAME, rdsDB);
+
+            table.dropTable();
+            table.createTable();
 
         /*
                                              _
@@ -21,44 +31,51 @@ public class Executor {
 
         */
 
-        int id = InsertExample.insert("ping");
-        if(id!=-1) {
-            System.out.println("Created row!");
-        }
+            int id = table.insert("ping");
+            if (id != -1) {
+                System.out.println("Created row!");
+            }
 
-        String data = SelectExample.get(id);
-        if(data!=null){
-            System.out.println("value from database row ["+id+"]: "+data);
-        }else{
-            System.out.println("Data not found in the database!");
-        }
+            String data = table.get(id);
+            if (data != null) {
+                System.out.println("value from database row [" + id + "]: " + data);
+            } else {
+                System.out.println("Data not found in the database!");
+            }
 
-        if(UpdateExample.update(id, "pong")){
-            System.out.println("Updated row");
-        }else{
-            System.out.println("Failed to update row!");
-        }
+            if (table.update(id, "pong")) {
+                System.out.println("Updated row");
+            } else {
+                System.out.println("Failed to update row!");
+            }
 
-        data = SelectExample.get(id);
-        if(data!=null){
-            System.out.println("value from database row ["+id+"]: "+data);
-        }else{
-            System.out.println("Data not found in the database!");
-        }
+            data = table.get(id);
+            if (data != null) {
+                System.out.println("value from database row [" + id + "]: " + data);
+            } else {
+                System.out.println("Data not found in the database!");
+            }
 
-        if(DeleteExample.delete(id)){
-            System.out.println("Deleted the row ["+id+"]");
-        }else{
-            System.out.println("Failed to delete the row["+id+"]");
-        }
+            if (table.delete(id)) {
+                System.out.println("Deleted the row [" + id + "]");
+            } else {
+                System.out.println("Failed to delete the row[" + id + "]");
+            }
 
-        data = SelectExample.get(id);
-        if(data!=null){
-            System.out.println("value from database row ["+id+"]: "+data);
-        }else{
-            System.out.println("Data not found in the database!");
-        }
+            data = table.get(id);
+            if (data != null) {
+                System.out.println("value from database row [" + id + "]: " + data);
+            } else {
+                System.out.println("Data not found in the database!");
+            }
 
-        DBConnector.close();
+            table.dropTable();
+            rdsDB.close();
+        }catch (Exception e){
+
+        }
+    }
+    public static void main(String[] args){
+        execute(System.out);
     }
 }
