@@ -25,7 +25,6 @@ public class DBController {
         settings.put("RDS_USER", fetch("RDS_USER"));
         settings.put("RDS_PASS", fetch("RDS_PASS"));
 
-
         try {
             conn = DriverManager.getConnection(
                 "jdbc:"+DRIVER+"://"+settings.get("RDS_HOST")+"/" +
@@ -64,9 +63,9 @@ public class DBController {
                 prop.load(new FileInputStream(CREDENTIALS_FILE_PATH));
             }
             return prop.getProperty(key);
-        } else if(System.getenv("RDS_HOST")!=null){ // environment variables
+        } else if(System.getenv(key)!=null){ // environment variables
             return System.getenv(key);
-        }else if(System.getProperty("RDS_HOST")!=null){
+        }else if(System.getProperty(key)!=null){
             return System.getProperty(key);
         }else{
             return null;
