@@ -20,34 +20,11 @@ public class DBController {
 
         HashMap<String, String> settings = new HashMap<String, String>();
 
-        settings.put("RDS_HOST","");
-        settings.put("RDS_DB","");
-        settings.put("RDS_USER","");
-        settings.put("RDS_PASS","");
+        settings.put("RDS_HOST", fetch("RDS_HOST"));
+        settings.put("RDS_DB", fetch("RDS_DB"));
+        settings.put("RDS_USER", fetch("RDS_USER"));
+        settings.put("RDS_PASS", fetch("RDS_PASS"));
 
-        if (new File(CREDENTIALS_FILE_PATH).exists()) { //file stored properties
-
-            Properties prop = new Properties();
-            prop.load(new FileInputStream(CREDENTIALS_FILE_PATH));
-            for(Map.Entry<String, String> setting:settings.entrySet()){
-                settings.put( setting.getKey(), prop.getProperty(setting.getKey()) );
-            }
-
-        } else if(System.getenv("RDS_HOST")!=null){ // environment variables
-
-            for(Map.Entry<String, String> setting:settings.entrySet()){
-                settings.put( setting.getKey(), System.getenv(setting.getKey()) );
-            }
-
-        }else if(System.getProperty("RDS_HOST")!=null){
-
-            for(Map.Entry<String, String> setting:settings.entrySet()){
-                settings.put( setting.getKey(), System.getProperty(setting.getKey()) );
-            }
-
-        }else{
-            throw new IOException();
-        }
 
         try {
             conn = DriverManager.getConnection(
@@ -76,6 +53,23 @@ public class DBController {
             conn.close();
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    public static Properties prop = null;
+    public static String fetch(String key) throws IOException{ // get from Env vars, System properties, config file
+        if (new File(CREDENTIALS_FILE_PATH).exists()) { //file stored properties
+            if(prop==null) {
+                prop = new Properties();
+                prop.load(new FileInputStream(CREDENTIALS_FILE_PATH));
+            }
+            return prop.getProperty(key);
+        } else if(System.getenv("RDS_HOST")!=null){ // environment variables
+            return System.getenv(key);
+        }else if(System.getProperty("RDS_HOST")!=null){
+            return System.getProperty(key);
+        }else{
+            return null;
         }
     }
 }
