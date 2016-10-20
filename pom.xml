@@ -58,6 +58,19 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.3.11.v20160721</version>
             </plugin>
+            <plugin>
+                <groupId>br.com.ingenieux</groupId>
+                <artifactId>beanstalk-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <applicationName>TestWar</applicationName>
+                    <s3Bucket>elasticbeanstalk-us-west-1-447502489941</s3Bucket>
+                    <versionLabel>1.1</versionLabel>
+                    <environmentRef>TestWar</environmentRef>
+                    <s3Key>${project.artifactId}/${project.build.finalName}-${maven.build.timestamp}.war</s3Key>
+                    <!-- will save as s3://[bucket name]/[artifactId]/artifactId-version-TIMESTAMP.war -->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
