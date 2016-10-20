@@ -62,8 +62,12 @@ public class DBController {
                 prop = new Properties();
                 prop.load(new FileInputStream(CREDENTIALS_FILE_PATH));
             }
-            return prop.getProperty(key);
-        } else if(System.getenv(key)!=null){ // environment variables
+            String val = prop.getProperty(key);
+            if(val!=null){
+                return val;
+            }
+        }
+        if(System.getenv(key)!=null){ // environment variables
             return System.getenv(key);
         }else if(System.getProperty(key)!=null){
             return System.getProperty(key);
