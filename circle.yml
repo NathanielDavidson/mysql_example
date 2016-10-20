@@ -4,6 +4,7 @@ test:
     - cp ./*/*/*.xml $CIRCLE_TEST_REPORTS/junit/
     - cp ./*/*.war $CIRCLE_TEST_REPORTS/
     - mvn verify
+    - bash <(curl -s https://codecov.io/bash)
 notify:
   webhooks:
     - url: http://csumbse.net/harbormaster/hook/circleci/
