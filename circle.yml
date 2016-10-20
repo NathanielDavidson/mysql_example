@@ -1,8 +1,8 @@
 test:
   post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - cp ./*/*/*.xml $CIRCLE_TEST_REPORTS/junit/
-    - cp ./*/*.war $CIRCLE_TEST_REPORTS/
+    - mkdir -p $CIRCLE_TEST_REPORTS/reports/
+    - cp ./*/*-reports/*.xml $CIRCLE_TEST_REPORTS/reports/
+    - cp ./*/*.war $CIRCLE_ARTIFACTS/
     - mvn verify
     - bash <(curl -s https://codecov.io/bash)
 notify:
