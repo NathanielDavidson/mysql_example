@@ -66,10 +66,10 @@ public class IdDataTableIT {
     public void updateMovieRecordConfirm(){
         int id = table.insert("Terminator");
 
-        table.update(id, "Terminator 2");
+        table.update(id, "Terminator 3");
 
         String data = table.get(id);
         assertNotNull(data);
-        assertTrue(data.equals("Terminator 2"));
+        assertTrue(data.equals("Terminator 3"));
     }
 }
